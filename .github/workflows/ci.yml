@@ -1,0 +1,16 @@
+name: ci
+
+on:
+  push:
+    branches: ["**"]
+  repository_dispatch:
+    types: [contract_content_changed] # sent by the Pact Broker webhook (contracts repo: mise run webhooks:create)
+
+jobs:
+  pipeline:
+    permissions:
+      contents: write
+    uses: all-boundaries/contracts/.github/workflows/service-pipeline.yml@main
+    with:
+      role: provider
+    secrets: inherit
