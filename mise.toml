@@ -15,3 +15,11 @@ run = "bun run check"
 [tasks."contracts:verify"]
 description = "Verify the pacts consumers published to the local broker (start it with mise run up in the contracts repo)"
 run = "PACT_BROKER_BASE_URL=${PACT_BROKER_BASE_URL:-http://localhost:9292} bun test test/contracts"
+
+[tasks.ci]
+description = "A branch build as the GitHub workflow runs it, against the local broker (contracts repo: mise run up)"
+run = "bun ${CONTRACTS_DIR:-../contracts}/scripts/pipeline.ts branch --role provider"
+
+[tasks."ci:main"]
+description = "A push to main: test, tag, publish, verify, then staging (add -- --promote to go on to production)"
+run = "bun ${CONTRACTS_DIR:-../contracts}/scripts/pipeline.ts main --role provider"
